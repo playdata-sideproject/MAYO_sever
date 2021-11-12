@@ -3,6 +3,7 @@ package kr.pe.mayo.config.oauth;
 import kr.pe.mayo.controller.UserController;
 import kr.pe.mayo.dao.UserRepository;
 import kr.pe.mayo.domain.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -14,11 +15,10 @@ import javax.servlet.http.HttpSession;
 
 @Service
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
-
     @Autowired
     private UserRepository dao;
     @Autowired
-    private UserController controller;
+    private HttpSession session;
 
 
     // 구글로그인 후처리 메소드 - 구글로부터 받은 userRequest 를 후처리
@@ -26,8 +26,6 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 
         OAuth2User oAuth2User = super.loadUser(userRequest);
-        System.out.println("getAttributes:  " + oAuth2User.getAttributes());  // System.out.println(userRequest.getClientRegistration().getClientId());
-
 
         // oauth 로그인 후 강제 회원가입 처리
         String provider = userRequest.getClientRegistration().getClientId();  // = google
@@ -48,8 +46,8 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
                     .provider(provider)
                     .providerId(providerId)
                     .build();
-            
             dao.save(user);
+            session.setAttribute("user", user);
         }
 
         return new PrincipalDetails(user, oAuth2User.getAttributes());   // 여기서 PrincipalDetails 객체를 리턴해주면 이게 Authentication 객체로 들어가서 시큐리티 세션에 저장됨됨

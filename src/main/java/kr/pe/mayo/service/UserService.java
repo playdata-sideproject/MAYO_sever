@@ -16,8 +16,13 @@ public class UserService {
     @Autowired
     private UserRepository dao;
 
-    /** 자동 회원가입 후 추가정보 입력 */
-    public User registerCreater(String phone, String birth, String school) {
+
+    public User checkFirstJoin(String username) {
+        return dao.findByUsername(username);
+    }
+
+    /** 자동 회원가입 후 추가정보 입력 폼 */
+    public User register(String phone, String birth, String school) {
         // 시큐리티 세션 호출
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         System.out.println(authentication.getPrincipal());  // PrincipalDetails(user=kr.pe.mayo.domain.User@315d4798, attributes={sub=113751636601935164576, name=������, given_name=����, family_name=��, picture=https://lh3.googleusercontent.com/a/AATXAJxNCBozlh0bcRKvYMp6U4gt1MAW5TVMcPu52k9k=s96-c, email=hmjang28@gmail.com, email_verified=true, locale=ko})
@@ -35,4 +40,6 @@ public class UserService {
 
         return user;
     }
+
+
 }
