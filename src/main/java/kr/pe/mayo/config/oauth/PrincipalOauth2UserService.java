@@ -1,5 +1,6 @@
 package kr.pe.mayo.config.oauth;
 
+import kr.pe.mayo.config.oauth.provider.*;
 import kr.pe.mayo.controller.UserController;
 import kr.pe.mayo.dao.UserRepository;
 import kr.pe.mayo.domain.User;
@@ -11,6 +12,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 @Service
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
@@ -30,10 +32,29 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
 
         // oauth 로그인 후 강제 회원가입 처리
-        String provider = userRequest.getClientRegistration().getClientId();  // = google
-        String providerId = oAuth2User.getAttribute("sub");  // = 구글이 제공해주는 회원 고유 id
-        String name = oAuth2User.getAttribute("name");
-        String email = oAuth2User.getAttribute("email");
+
+        OAuth2UserInfo oAuth2UserInfo = null;
+        if (userRequest.getClientRegistration().getRegistrationId().equals("google")) {
+            System.out.println("구글 로그인 요청");
+            oAuth2UserInfo = new GoogleUserInfo(oAuth2User.getAttributes());
+        } else if (userRequest.getClientRegistration().getRegistrationId().equals("facebook")) {
+            System.out.println("페이스북 로그인 요청");
+            oAuth2UserInfo = new FacebookUserInfo(oAuth2User.getAttributes());
+        } else if (userRequest.getClientRegistration().getRegistrationId().equals("naver")){
+            System.out.println("네이버 로그인 요청");
+            oAuth2UserInfo = new NaverUserInfo((Map)oAuth2User.getAttributes().get("response"));
+        } else if (userRequest.getClientRegistration().getRegistrationId().equals("kakao")){
+            System.out.println("카카오 로그인 요청");
+            // kakao_account안에 또 profile이라는 JSON객체가 있음.
+            oAuth2UserInfo= new KakaoUserInfo((Map)oAuth2User.getAttributes());
+        } else {
+            System.out.println("지원하지 않습니다.");
+        }
+
+        String provider = oAuth2UserInfo.getProvider(); // = google
+        String providerId = oAuth2UserInfo.getProviderId();  // = 구글이 제공해주는 회원 고유 id
+        String name = oAuth2UserInfo.getName();
+        String email = oAuth2UserInfo.getEmail();
         String username = provider + "-" + providerId;  // 절대 중복되지 않기 위해 이렇게 만들어줌
         String role = "ROLE_USER";
 

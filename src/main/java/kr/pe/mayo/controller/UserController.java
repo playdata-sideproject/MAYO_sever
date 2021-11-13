@@ -23,7 +23,7 @@ public class UserController {
     private UserRepository userRepository;
 
     @GetMapping("/login-success")
-    public String check(){
+    public String check() {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
@@ -31,7 +31,7 @@ public class UserController {
 
         User user = userRepository.findByUsername(principalDetails.getUser().getUsername());
 
-        if(user.getPhone() == null) {
+        if (user.getPhone() == null) {
             return "redirect:register.html";
         } else {
             return "redirect:index.html";
@@ -42,15 +42,15 @@ public class UserController {
 
 
     @PostMapping("/register")
-    public String register(HttpSession session, String phone, String birth, String school){
-        User user = userService.registerCreater(phone, birth, school);
+    public String register(HttpSession session, String phone, String birth, String school) {
+        User user = userService.registerCreator(phone, birth, school);
         session.setAttribute("user", user);
 
         return "redirect:index.html";
     }
 
     @GetMapping("/user/oauth-test")
-    public void sessionTest(){
+    public void sessionTest() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         System.out.println("oauth 회원가입 완료후: " + principalDetails);
@@ -59,7 +59,8 @@ public class UserController {
     }
 
     @GetMapping("/user/register-test")
-    public void sessionTest2(HttpSession session){
+    public void sessionTest2(HttpSession session) {
         User user = (User) session.getAttribute("user");
         System.out.println("register 회원가입 완료후: " + user.getSchool());
     }
+}
