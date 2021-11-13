@@ -5,6 +5,7 @@ import kr.pe.mayo.controller.UserController;
 import kr.pe.mayo.dao.UserRepository;
 import kr.pe.mayo.domain.User;
 import kr.pe.mayo.domain.dto.Role;
+import kr.pe.mayo.domain.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -33,28 +34,32 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         // oauth 로그인 후 강제 회원가입 처리
         OAuth2UserInfo oAuth2UserInfo = null;
         if (userRequest.getClientRegistration().getRegistrationId().equals("google")) {
-            System.out.println("구글 로그인 요청");
+            System.out.println("google");
             oAuth2UserInfo = new GoogleUserInfo(oAuth2User.getAttributes());
         } else if (userRequest.getClientRegistration().getRegistrationId().equals("facebook")) {
-            System.out.println("페이스북 로그인 요청");
+            System.out.println("facebook");
             oAuth2UserInfo = new FacebookUserInfo(oAuth2User.getAttributes());
         } else if (userRequest.getClientRegistration().getRegistrationId().equals("naver")){
-            System.out.println("네이버 로그인 요청");
+            System.out.println("naver");
             oAuth2UserInfo = new NaverUserInfo((Map)oAuth2User.getAttributes().get("response"));
         } else if (userRequest.getClientRegistration().getRegistrationId().equals("kakao")){
-            System.out.println("카카오 로그인 요청");
+            System.out.println("kakao");
             // kakao_account안에 또 profile이라는 JSON객체가 있음.
             oAuth2UserInfo= new KakaoUserInfo((Map)oAuth2User.getAttributes());
         } else {
             System.out.println("지원하지 않습니다.");
         }
 
+        // 아래 코드는 구글 OAuth2User2 한정적
+        // 때문에 카카오일때도 이메일과 다른 정보를 담을 수 있게 서비스 객체 Refactoring 필요
+
         String provider = userRequest.getClientRegistration().getClientId();  // = google
         String providerId = oAuth2User.getAttribute("sub");  // = 구글이 제공해주는 회원 고유 id
         String name = oAuth2User.getAttribute("name");
         String email = oAuth2User.getAttribute("email");
         String username = provider + "-" + providerId;  // 절대 중복되지 않기 위해 이렇게 만들어줌
-        Role role = Role.USER;
+        Role role = Role.ROLE_USER;
+
 
         User user = dao.findByUsername(username);
         if (user == null){   // db에 회원정보 없다면 새로운 user객체 생성

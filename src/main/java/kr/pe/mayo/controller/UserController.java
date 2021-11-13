@@ -3,6 +3,7 @@ package kr.pe.mayo.controller;
 import kr.pe.mayo.config.oauth.PrincipalDetails;
 import kr.pe.mayo.dao.UserRepository;
 import kr.pe.mayo.domain.User;
+import kr.pe.mayo.domain.dto.UserDTO;
 import kr.pe.mayo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ResolvableType;
@@ -24,7 +25,7 @@ import java.util.Map;
 @Controller
 public class UserController {
 
-    // OAuth기본 url tlwkr
+    // OAuth기본 url
     private static final String authorizationRequestBaseUri = "oauth2/authorization";
     Map<String, String> oauth2AuthenticationUrls = new HashMap<>();
 
@@ -45,6 +46,9 @@ public class UserController {
         // application-oauth.properties 에 있는 OAuth2 클라이언드 정보 가져오기
         // 이 코드셋을 사용하는 이유는 View에서 하나하나 작성하는것보단 SNS 로그인이 추가될 때 마다 정보를 View 같이 보내주며
         // 반복문을 통해 렌더링
+
+        // authorizationRequestBaseUri = "oauth2/authorization" + "/" + registration.getRegistrationId()
+
         Iterable<ClientRegistration> clientRegistrations = null;
         ResolvableType type = ResolvableType.forInstance(clientRegistrationRepository)
                 .as(Iterable.class);
@@ -64,7 +68,8 @@ public class UserController {
             Google=oauth2/authorization/google,
             kakao=oauth2/authorization/kakao,
             Naver=oauth2/authorization/naver,
-            Facebook=oauth2/authorization/facebook}
+            Facebook=oauth2/authorization/facebook
+        }
          */
         model.addAttribute("urls", oauth2AuthenticationUrls);
 
@@ -96,9 +101,13 @@ public class UserController {
 
 
     @PostMapping("/register")
-    public String register(HttpSession session, String phone, String birth, String school){
-        User user = userService.registerCreator(phone, birth, school);
-        session.setAttribute("user", user);
+//    public String register(HttpSession session, String phone, String birth, String school){
+    public String register(String name, String phone, String birth, String school){
+        // DTO객체를 만든 이유:
+        // - 후에 RestController & axios로 클라이언트와 요청응답을 할 때 더 깔끔한 코드구조를 위해..!
+        UserDTO.Register register = new UserDTO.Register(name, phone, birth, school);
+        User user = userService.registerCreator(register);
+//        session.setAttribute("user", user);
 
         return "redirect:index.html";
     }
