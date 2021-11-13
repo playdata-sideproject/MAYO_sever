@@ -1,13 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+
 </head>
 <body>
     <h3>구글로 간편 회원가입</h3>
     <form action="register" method="post">
-        이름: <input type="text" name="name" value="여기에 이름 뜨게">
+        이름: <input type="${user}" name="name" th:value="${user}">
         아이디: <input type="text" name="name" value="여기에 아이디 뜨게">
         연락처: <input type="text" name="phone"><br>
         생년월일: <input type="text" name="birth"><br>

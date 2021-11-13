@@ -1,12 +1,10 @@
 package kr.pe.mayo.domain;
 
+import kr.pe.mayo.domain.dto.Role;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 @NoArgsConstructor
@@ -23,7 +21,8 @@ public class User {
     private String providerId;  // 구글에서 넘겨준 사용자 고유번호=id (sub 라고 표시되는듯)
     private String name;
     private String email;
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
     @CreationTimestamp
     private Timestamp createdAt;
     private String phone;
@@ -31,7 +30,7 @@ public class User {
     private String school;
 
     @Builder
-    public User(String username, String name, String email, String role, String provider, String providerId, Timestamp createDate) {
+    public User(String username, String name, String email, Role role, String provider, String providerId, Timestamp createDate) {
         this.username = username;
         this.name = name;
         this.email = email;
