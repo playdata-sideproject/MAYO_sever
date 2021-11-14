@@ -24,10 +24,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().permitAll()  // 그외 요청은 모두 접근 가능
                 .and()
                 .logout()
-                .logoutSuccessUrl("/index.html")
+                .logoutSuccessUrl("/")
                 .and()
                 .oauth2Login()
-                .loginPage("/index.html")
+                .loginPage("/")
                 .defaultSuccessUrl("/login-success")
                 .userInfoEndpoint()  // 구글로그인 완료된 후 - AccessToken+사용자프로필 정보를 받은 상태
                 .userService(principalOauth2UserService);  // 이 클래스에서 정의한대로 후처리 하겠다

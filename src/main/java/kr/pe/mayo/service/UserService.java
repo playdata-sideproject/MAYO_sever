@@ -3,6 +3,7 @@ package kr.pe.mayo.service;
 import kr.pe.mayo.config.oauth.PrincipalDetails;
 import kr.pe.mayo.dao.UserRepository;
 import kr.pe.mayo.domain.User;
+import kr.pe.mayo.domain.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,7 +18,7 @@ public class UserService {
     private UserRepository dao;
 
     /** 자동 회원가입 후 추가정보 입력 */
-    public User registerCreator(String phone, String birth, String school) {
+    public User registerCreator(UserDTO.Register register) {
         // 시큐리티 세션 호출
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         System.out.println(authentication.getPrincipal());  // PrincipalDetails(user=kr.pe.mayo.domain.User@315d4798, attributes={sub=113751636601935164576, name=������, given_name=����, family_name=��, picture=https://lh3.googleusercontent.com/a/AATXAJxNCBozlh0bcRKvYMp6U4gt1MAW5TVMcPu52k9k=s96-c, email=hmjang28@gmail.com, email_verified=true, locale=ko})
@@ -28,9 +29,10 @@ public class UserService {
         System.out.println(sessionUser.getUsername());
 
         User user = dao.findByUsername(sessionUser.getUsername());
-        user.setPhone(phone);
-        user.setBirth(birth);
-        user.setSchool(school);
+        user.setName(register.getName());
+        user.setPhone(register.getPhone());
+        user.setBirth(register.getBirth());
+        user.setSchool(register.getSchool());
         dao.save(user);
 
         return user;
