@@ -18,19 +18,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable();
-        httpSecurity.authorizeRequests()
-                .antMatchers("/user/**").authenticated()   // /user로 들어오는 모든 요청은 권한 필요
-                .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")   // /admin으로 들어오는 모든 요청은 ADMIN이라는 역할이 있는 사람만 접근 가능 (스프링 시큐리티에서는 항상 ROLE_ADMIN 이런 형태여야 한다)
-                .anyRequest().permitAll()  // 그외 요청은 모두 접근 가능
-                .and()
+        httpSecurity
+                .authorizeRequests()
+                    .antMatchers("/user/**").authenticated()   // /user로 들어오는 모든 요청은 권한 필요
+                    .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")   // /admin으로 들어오는 모든 요청은 ADMIN이라는 역할이 있는 사람만 접근 가능 (스프링 시큐리티에서는 항상 ROLE_ADMIN 이런 형태여야 한다)
+                    .anyRequest().permitAll()  // 그외 요청은 모두 접근 가능
+                    .and()
                 .logout()
-                .logoutSuccessUrl("/")
-                .and()
+                    .logoutSuccessUrl("/")
+                    .and()
                 .oauth2Login()
-                .loginPage("/")
-                .defaultSuccessUrl("/login-success")
-                .userInfoEndpoint()  // 구글로그인 완료된 후 - AccessToken+사용자프로필 정보를 받은 상태
-                .userService(principalOauth2UserService);  // 이 클래스에서 정의한대로 후처리 하겠다
+                    .loginPage("/")
+                    .defaultSuccessUrl("/login-success")
+                    .userInfoEndpoint()  // 구글로그인 완료된 후 - AccessToken+사용자프로필 정보를 받은 상태
+                    .userService(principalOauth2UserService);  // 이 클래스에서 정의한대로 후처리 하겠다
         }
 
 }

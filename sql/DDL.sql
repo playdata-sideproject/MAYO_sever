@@ -14,6 +14,8 @@ create table user (
     created_at date,
     user_status char default 0,
     -- 사용자가 직접 추가할정보
+    school varchar(20),
+    birth date,
     school varchar(20)
 );
 

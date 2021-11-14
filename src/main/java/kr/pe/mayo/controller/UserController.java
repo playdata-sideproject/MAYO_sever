@@ -25,8 +25,7 @@ public class UserController {
 
 
     @GetMapping("/login-success")
-    public String checkFirstJoin(@AuthenticationPrincipal PrincipalDetails userDetails, HttpSession session){
-        System.out.println("시큐리티 세션에 저장된 유저 username: " + userDetails.getUser().getUsername());
+    public String checkFirstJoin(@AuthenticationPrincipal PrincipalDetails userDetails){
 
         // 뷰 분기
         User user = userService.checkFirstJoin(userDetails.getUser().getUsername());
@@ -37,7 +36,6 @@ public class UserController {
 
         // 다시 방문해서 로그인하는 사용자라면 이미 추가정보도 다 있음. HttpSession에 저장
         session.setAttribute("user", user);
-        System.out.println("그냥 세션에 저장된 유저: " + session.getAttribute("user"));
         return "redirect:/";
     }
 
@@ -46,22 +44,7 @@ public class UserController {
     public String register(HttpSession session, String phone, String birth, String school){
         User user = userService.register(phone, birth, school);
         session.setAttribute("user", user);
-        System.out.println("추가정보 입력 후 세션에 저장된 유저: " + session.getAttribute("user"));
         return "redirect:/";
     }
 
-    @GetMapping("/user/oauth-test")
-    public void sessionTest(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-        System.out.println("oauth 회원가입 완료후: " + principalDetails);
-        System.out.println("oauth 회원가입 완료후: " + principalDetails.getUser());
-        System.out.println("oauth 회원가입 완료후: " + principalDetails.getAttributes());
-    }
-
-    @GetMapping("/user/register-test")
-    public void sessionTest2(HttpSession session){
-        User user = (User) session.getAttribute("user");
-        System.out.println("register 회원가입 완료후: " + user.getSchool());
-    }
 }
