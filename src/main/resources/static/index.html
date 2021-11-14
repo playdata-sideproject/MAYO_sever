@@ -7,12 +7,12 @@
 <body>
 <h3>인덱스 페이지</h3>
 
-
 <table th:each="url : ${urls}">
     <tr>
         <td><a href="#" th:href="${url.value}" th:text="${url.key}"></a></td>
         <td><a href="/logout">로그아웃</a></td>
     </tr>
 </table>
+
 </body>
 </html>

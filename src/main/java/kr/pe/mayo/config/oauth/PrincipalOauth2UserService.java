@@ -60,9 +60,9 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         // 때문에 카카오일때도 이메일과 다른 정보를 담을 수 있게 서비스 객체 Refactoring 필요
 
         String provider = userRequest.getClientRegistration().getClientId();  // = google
-        String providerId = oAuth2User.getAttribute("sub");  // = 구글이 제공해주는 회원 고유 id
-        String name = oAuth2User.getAttribute("name");
-        String email = oAuth2User.getAttribute("email");
+        String providerId = oAuth2UserInfo.getProviderId();  // = 구글이 제공해주는 회원 고유 id
+        String name = oAuth2UserInfo.getName();
+        String email = oAuth2UserInfo.getEmail();
         String username = provider + "-" + providerId;  // 절대 중복되지 않기 위해 이렇게 만들어줌
         Role role = Role.ROLE_USER;
 
