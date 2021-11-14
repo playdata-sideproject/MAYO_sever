@@ -10,7 +10,7 @@
 <table th:each="url : ${urls}">
     <tr>
         <td><a href="#" th:href="${url.value}" th:text="${url.key}"></a></td>
-        <td><a href="/logout">로그아웃</a></td>
+        <td><a th:if="${session.user}" href="/logout">로그아웃</a></td>
     </tr>
 </table>
 
