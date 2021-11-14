@@ -3,6 +3,7 @@ package kr.pe.mayo.service;
 import kr.pe.mayo.config.oauth.PrincipalDetails;
 import kr.pe.mayo.dao.UserRepository;
 import kr.pe.mayo.domain.User;
+import kr.pe.mayo.domain.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,13 +17,8 @@ public class UserService {
     @Autowired
     private UserRepository dao;
 
-
-    public User checkFirstJoin(String username) {
-        return dao.findByUsername(username);
-    }
-
-    /** 자동 회원가입 후 추가정보 입력 폼 */
-    public User register(String phone, String birth, String school) {
+    /** 자동 회원가입 후 추가정보 입력 */
+    public User registerCreator(UserDTO.Register register) {
         // 시큐리티 세션 호출
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -31,9 +27,10 @@ public class UserService {
         User sessionUser = principalDetails.getUser();
 
         User user = dao.findByUsername(sessionUser.getUsername());
-        user.setPhone(phone);
-        user.setBirth(birth);
-        user.setSchool(school);
+        user.setName(register.getName());
+        user.setPhone(register.getPhone());
+        user.setBirth(register.getBirth());
+        user.setSchool(register.getSchool());
         dao.save(user);
 
         return user;

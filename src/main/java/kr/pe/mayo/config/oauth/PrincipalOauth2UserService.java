@@ -1,9 +1,15 @@
 package kr.pe.mayo.config.oauth;
 
+import kr.pe.mayo.config.oauth.provider.*;
 import kr.pe.mayo.controller.UserController;
 import kr.pe.mayo.dao.UserRepository;
 import kr.pe.mayo.domain.User;
+<<<<<<< HEAD
 import lombok.RequiredArgsConstructor;
+=======
+import kr.pe.mayo.domain.dto.Role;
+import kr.pe.mayo.domain.dto.UserDTO;
+>>>>>>> 9445450ab3ac9687ae1a82c73011e0e86277944f
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -12,6 +18,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 @Service
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
@@ -20,20 +27,45 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
     @Autowired
     private HttpSession session;
 
-
     // 구글로그인 후처리 메소드 - 구글로부터 받은 userRequest 를 후처리
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 
         OAuth2User oAuth2User = super.loadUser(userRequest);
+<<<<<<< HEAD
+=======
+        System.out.println("getAttributes:  " + oAuth2User.getAttributes());  // System.out.println(userRequest.getClientRegistration().getClientId());
+>>>>>>> 9445450ab3ac9687ae1a82c73011e0e86277944f
 
         // oauth 로그인 후 강제 회원가입 처리
+        OAuth2UserInfo oAuth2UserInfo = null;
+        if (userRequest.getClientRegistration().getRegistrationId().equals("google")) {
+            System.out.println("google");
+            oAuth2UserInfo = new GoogleUserInfo(oAuth2User.getAttributes());
+        } else if (userRequest.getClientRegistration().getRegistrationId().equals("facebook")) {
+            System.out.println("facebook");
+            oAuth2UserInfo = new FacebookUserInfo(oAuth2User.getAttributes());
+        } else if (userRequest.getClientRegistration().getRegistrationId().equals("naver")){
+            System.out.println("naver");
+            oAuth2UserInfo = new NaverUserInfo((Map)oAuth2User.getAttributes().get("response"));
+        } else if (userRequest.getClientRegistration().getRegistrationId().equals("kakao")){
+            System.out.println("kakao");
+            // kakao_account안에 또 profile이라는 JSON객체가 있음.
+            oAuth2UserInfo= new KakaoUserInfo((Map)oAuth2User.getAttributes());
+        } else {
+            System.out.println("지원하지 않습니다.");
+        }
+
+        // 아래 코드는 구글 OAuth2User2 한정적
+        // 때문에 카카오일때도 이메일과 다른 정보를 담을 수 있게 서비스 객체 Refactoring 필요
+
         String provider = userRequest.getClientRegistration().getClientId();  // = google
         String providerId = oAuth2User.getAttribute("sub");  // = 구글이 제공해주는 회원 고유 id
         String name = oAuth2User.getAttribute("name");
         String email = oAuth2User.getAttribute("email");
         String username = provider + "-" + providerId;  // 절대 중복되지 않기 위해 이렇게 만들어줌
-        String role = "ROLE_USER";
+        Role role = Role.ROLE_USER;
+
 
         User user = dao.findByUsername(username);
         if (user == null){   // db에 회원정보 없다면 새로운 user객체 생성

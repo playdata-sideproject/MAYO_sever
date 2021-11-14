@@ -1,10 +1,13 @@
 package kr.pe.mayo.config.oauth;
 
 import kr.pe.mayo.domain.User;
+import kr.pe.mayo.domain.dto.Role;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
@@ -24,6 +27,7 @@ import java.util.Map;
  1. 우리가 만든 User 클래스형 객체를 품기
  2. Authentication 객체 안에 들어갈 수 있는 형태로 만들기
  */
+
 @Data
 public class PrincipalDetails implements OAuth2User {
 
@@ -36,17 +40,27 @@ public class PrincipalDetails implements OAuth2User {
         this.attributes = attributes;
     }
 
-
     // OAuth2User 인터페이스 메소드 오버라이딩
+
     @Override
     public Map<String, Object> getAttributes() {
         return attributes;
     }
 
     // 밑에것들은 뭔지잘모르겠음
+    // 해당 유저의 권한을 리턴하는 곳!!
+    // ROLE_USER 리턴하는 역할 (아마도 후에 관리자인지 유저인지 확인할 때 필요한듯?)
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+    public Collection<? extends GrantedAuthority> getAuthorities(){
+        Collection<GrantedAuthority> collect = new ArrayList<>();
+        collect.add(new GrantedAuthority() {
+            @Override
+            public String getAuthority() {
+                return user.getRole().toString();
+            }
+        });
+//        user.getRole();
+        return collect;
     }
 
     @Override
