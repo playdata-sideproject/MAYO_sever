@@ -15,8 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
@@ -71,7 +69,6 @@ public class UserController {
             Google=oauth2/authorization/google,
             kakao=oauth2/authorization/kakao,
             Naver=oauth2/authorization/naver,
-            Facebook=oauth2/authorization/facebook
         }
          */
         model.addAttribute("urls", oauth2AuthenticationUrls);
@@ -99,7 +96,6 @@ public class UserController {
         // 뷰 분기
         // HttpSession에 넣나?
     }
-
 
     @PostMapping("/register")
     public String register(HttpSession session, String name, String phone, String birth, String school){
