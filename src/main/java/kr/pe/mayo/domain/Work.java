@@ -1,11 +1,14 @@
 package kr.pe.mayo.domain;
 
+import kr.pe.mayo.domain.dto.Category;
+import kr.pe.mayo.domain.dto.WorkImgFileDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,10 +21,14 @@ public class Work {
     private long workIdx;
     @ManyToOne
     private User userIdx;
-    @ManyToOne
-    private Category catIdx;
+    @Enumerated(EnumType.STRING)
+    private Category category;
     private String workTitle;
     private String workContent;
-    private int imgIdx;
     private char workStatus;
+
+    @ManyToOne
+    private List<WorkImgFile> workImgFiles;
+
+
 }
