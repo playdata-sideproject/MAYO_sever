@@ -1,12 +1,10 @@
 package kr.pe.mayo.config.oauth;
 
 import kr.pe.mayo.domain.User;
-import kr.pe.mayo.domain.dto.Role;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
