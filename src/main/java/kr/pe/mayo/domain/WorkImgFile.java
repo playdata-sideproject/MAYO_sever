@@ -1,21 +1,26 @@
 package kr.pe.mayo.domain;
 
-import kr.pe.mayo.domain.dto.Category;
-import kr.pe.mayo.domain.dto.WorkImgFileDTO;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
-import javax.persistence.*;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
+@AllArgsConstructor
 @Entity
-@ToString
+@Builder
 public class WorkImgFile {
     @Id
-    private Long workImg_idx;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long workImgIdx;
+
+    private Long workIdx;
     private String originalFileName;
     private String storedFilePath;
     private long fileSize;
