@@ -12,15 +12,19 @@ import javax.persistence.*;
 public class WorkImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long imgIdx;
+    private long workImgIdx;
+    @ManyToOne
+    @JoinColumn(name="workIdx")
+    private Work workIdx;
     private String origFileName;
-    private String fileName;
     private String filePath;
+    private long fileSize;
 
     @Builder
-    public WorkImage(String origFileName, String fileName, String filePath) {
+    public WorkImage(Work workIdx, String origFileName, String filePath, long fileSize) {
+        this.workIdx = workIdx;
         this.origFileName = origFileName;
-        this.fileName = fileName;
         this.filePath = filePath;
+        this.fileSize = fileSize;
     }
 }

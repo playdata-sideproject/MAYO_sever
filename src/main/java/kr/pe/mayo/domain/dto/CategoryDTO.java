@@ -1,2 +1,8 @@
-package kr.pe.mayo.domain.dto;public class CategoryDTO {
+package kr.pe.mayo.domain.dto;
+
+import lombok.Data;
+
+@Data
+public class CategoryDTO {
+
 }

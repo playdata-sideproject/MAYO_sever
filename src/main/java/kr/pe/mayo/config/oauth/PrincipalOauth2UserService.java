@@ -1,15 +1,12 @@
 package kr.pe.mayo.config.oauth;
 
-import kr.pe.mayo.config.oauth.provider.*;
-import kr.pe.mayo.controller.UserController;
+import kr.pe.mayo.config.oauth.provider.GoogleUserInfo;
+import kr.pe.mayo.config.oauth.provider.KakaoUserInfo;
+import kr.pe.mayo.config.oauth.provider.NaverUserInfo;
+import kr.pe.mayo.config.oauth.provider.OAuth2UserInfo;
 import kr.pe.mayo.dao.UserRepository;
 import kr.pe.mayo.domain.User;
-<<<<<<< HEAD
-import lombok.RequiredArgsConstructor;
-=======
 import kr.pe.mayo.domain.dto.Role;
-import kr.pe.mayo.domain.dto.UserDTO;
->>>>>>> 9445450ab3ac9687ae1a82c73011e0e86277944f
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -32,10 +29,6 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 
         OAuth2User oAuth2User = super.loadUser(userRequest);
-<<<<<<< HEAD
-=======
-        System.out.println("getAttributes:  " + oAuth2User.getAttributes());  // System.out.println(userRequest.getClientRegistration().getClientId());
->>>>>>> 9445450ab3ac9687ae1a82c73011e0e86277944f
 
         // oauth 로그인 후 강제 회원가입 처리
         OAuth2UserInfo oAuth2UserInfo = null;
