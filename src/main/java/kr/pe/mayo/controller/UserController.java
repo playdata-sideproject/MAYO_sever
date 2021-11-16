@@ -35,10 +35,10 @@ public class UserController {
     private UserService userService;
     @Autowired
     private HttpSession session;
-
-
     @Autowired
     private UserRepository userRepository;
+
+
 
     @GetMapping("/")
     public String index(Model model){
@@ -77,49 +77,39 @@ public class UserController {
     }
 
     @GetMapping("/login-success")
-//    public String checkFirstJoin(@AuthenticationPrincipal PrincipalDetails userDetails){
-//
-//        // 뷰 분기
-//        User user = userService.checkFirstJoin(userDetails.getUser().getUsername());
-//        String phone = user.getPhone();
-//        if (phone == null){  // 처음 회원가입하는 사용자라면 ... 근데 이걸 phone 컬럼으로 검증하는게 논리에 맞나...? 무튼 추가정보 입력 폼으로 이동
-//            return "register";
-//        }
-//
-//        // 다시 방문해서 로그인하는 사용자라면 이미 추가정보도 다 있음. HttpSession에 저장
-//        session.setAttribute("user", user);
-//        return "redirect:/";
-
-    public String check(Model model){
-
-        String url = "/";
+    public String check(){
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         System.out.println(principalDetails);
 
         User user = userRepository.findByUsername(principalDetails.getUser().getUsername());
+        session.setAttribute("user", user);
+        System.out.println(session.getAttribute("user").toString());
 
         System.out.println(user);
         if(user.getPhone() == null) {
-            model.addAttribute("user", user.getName());
-            url = "register.html";
-            return url;
+            return "register";
         }
 
-        return index(model);
+        return "redirect:/mypage";
     }
 
 
     @PostMapping("/register")
-    public String register(String name, String phone, String birth, String school){
+    public String register(HttpSession session, String name, String phone, String birth, String school){
+
         // DTO객체를 만든 이유:
         // - 후에 RestController & axios로 클라이언트와 요청응답을 할 때 더 깔끔한 코드구조를 위해..!
         UserDTO.Register register = new UserDTO.Register(name, phone, birth, school);
         User user = userService.registerCreator(register);
-//        session.setAttribute("user", user);
+        session.setAttribute("user", user);
 
-        return "redirect:index.html";
+        return "redirect:/mypage";
     }
 
+    @GetMapping("/mypage")
+    public String mypage(){
+        return "/mypage";
+    }
 }
