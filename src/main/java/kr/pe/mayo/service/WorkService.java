@@ -1,20 +1,17 @@
 package kr.pe.mayo.service;
 
 import kr.pe.mayo.common.FileUtils;
-import kr.pe.mayo.dao.WorkImgFileRepository;
+import kr.pe.mayo.dao.WorkImgRepository;
 import kr.pe.mayo.dao.WorkRepository;
 import kr.pe.mayo.domain.User;
 import kr.pe.mayo.domain.Work;
-import kr.pe.mayo.domain.WorkImgFile;
 import kr.pe.mayo.domain.dto.WorkDTO;
-import kr.pe.mayo.domain.dto.WorkImgFileDTO;
+import kr.pe.mayo.domain.dto.WorkImgDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-
-import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpSession;
 import java.util.Iterator;
@@ -30,7 +27,7 @@ public class WorkService {
     private WorkRepository workRepository;
 
     @Autowired
-    private WorkImgFileRepository workImgFileRepository;
+    private WorkImgRepository workImgRepository;
 
     @Autowired
     private HttpSession session;
@@ -49,8 +46,8 @@ public class WorkService {
             System.out.println("********* work id : " + work.getWorkIdx());
 
             // 업로드한 이미지를 가공한 리스트 만들기
-            List<WorkImgFileDTO> list = fileUtils.parseFileInfo(work.getWorkIdx(), multipartHttpServletRequest);
-            list.forEach(img -> workImgFileRepository.save(img.toEntity()));
+            List<WorkImgDTO> list = fileUtils.parseFileInfo(work.getWorkIdx(), multipartHttpServletRequest);
+            list.forEach(img -> workImgRepository.save(img.toEntity()));
         }
 
         // 파일정보 확인용

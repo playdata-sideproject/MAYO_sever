@@ -1,7 +1,6 @@
 package kr.pe.mayo.domain;
 
 import kr.pe.mayo.domain.dto.Category;
-import kr.pe.mayo.domain.dto.WorkImgFileDTO;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -44,5 +43,5 @@ public class Work {
     private char workStatus;
 
     @OneToMany
-    private List<WorkImgFile> workImgFiles;
+    private List<WorkImg> workImgs;
 }

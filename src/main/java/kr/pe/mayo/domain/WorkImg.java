@@ -15,7 +15,7 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @Entity
 @Builder
-public class WorkImgFile {
+public class WorkImg {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long workImgIdx;

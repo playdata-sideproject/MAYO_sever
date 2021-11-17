@@ -25,8 +25,14 @@ public class WorkDTO {
         private String workContent;
 
         public Work toEntity() {
-            return Work.builder().workTitle(workTitle).userIdx(user).category(category).workContent(workContent).build();
+            return Work.builder()
+                    .workTitle(workTitle)
+                    .userIdx(user)
+                    .category(category)
+                    .workContent(workContent)
+                    .build();
         }
+
     }
 
 }

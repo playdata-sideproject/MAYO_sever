@@ -1,6 +1,6 @@
 package kr.pe.mayo.common;
 
-import kr.pe.mayo.domain.dto.WorkImgFileDTO;
+import kr.pe.mayo.domain.dto.WorkImgDTO;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,12 +20,12 @@ import java.util.List;
 @Component
 public class FileUtils {
 
-    public List<WorkImgFileDTO> parseFileInfo(Long workIdx, MultipartHttpServletRequest multipartHttpServletRequest) throws Exception {
+    public List<WorkImgDTO> parseFileInfo(Long workIdx, MultipartHttpServletRequest multipartHttpServletRequest) throws Exception {
         if(ObjectUtils.isEmpty(multipartHttpServletRequest)) {
             return null;
         }
 
-        List<WorkImgFileDTO> imgList = new ArrayList<>();
+        List<WorkImgDTO> imgList = new ArrayList<>();
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyyMMdd");
         ZonedDateTime current = ZonedDateTime.now();
         String path = "images/" + current.format(format);
@@ -60,7 +60,7 @@ public class FileUtils {
                     }
 
                     newFileName = Long.toString(System.nanoTime()) + originalFileExtension;
-                    WorkImgFileDTO workImgFile = new WorkImgFileDTO();
+                    WorkImgDTO workImgFile = new WorkImgDTO();
                     workImgFile.setWorkIdx(workIdx);
                     workImgFile.setFileSize(multipartFile.getSize());
                     workImgFile.setOriginalFileName(multipartFile.getOriginalFilename());
