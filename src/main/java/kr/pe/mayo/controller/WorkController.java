@@ -17,8 +17,6 @@ public class WorkController {
     @Autowired
     WorkService workService;
 
-    @Autowired
-    private HttpSession session;
 
     @GetMapping("/upload")
     public String myPage() {
@@ -31,8 +29,6 @@ public class WorkController {
     public String uploadWork(WorkDTO.Upload upload, MultipartHttpServletRequest multipartHttpServletRequest) throws Exception{
         System.out.println("uploadWork ***************************");
         System.out.println(upload.getCategory());
-        upload.setUser((User) session.getAttribute("user"));
-        System.out.println(upload.getUsername());
         workService.uploadWork(upload, multipartHttpServletRequest);
         return "upload";
 //        return "work/myWorkList";
