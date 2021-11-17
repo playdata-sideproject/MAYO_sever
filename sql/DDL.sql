@@ -17,18 +17,28 @@ user_status char default 0,
 phone varchar(20),
 birth date,
 school varchar(20)
+-- reg_completed bool default false
 );
 
 
 create table work (
 work_idx int primary key auto_increment,
 user_idx int not null,
-cat_idx int not null,
+category varchar(20),
+-- cat_idx int not null,
 work_title varchar(100) not null,
 work_content longtext,
 work_created_at date not null,
-work_image int,
+-- work_image int,
 work_status char default 0
+);
+
+create table work_img (
+work_img_idx int primary key auto_increment,
+work_idx int not null,
+original_file_name varchar(100) not null,
+stored_file_path varchar(100) not null,
+file_size int not null
 );
 
 create table category (
@@ -59,8 +69,10 @@ user_idx int not null
 
 
 alter table work add constraint foreign key (user_idx) references user (user_idx);
-alter table work add constraint foreign key (cat_idx) references category (cat_idx);
+-- alter table work add constraint foreign key (cat_idx) references category (cat_idx);
 alter table comments add constraint foreign key (work_idx) references work (work_idx) on delete cascade;
+alter table work_img add constraint foreign key (work_idx) references work (work_idx) on delete cascade;
+
 alter table likes add constraint foreign key (work_idx) references work (work_idx) on delete cascade;
 alter table wish add constraint foreign key (work_idx) references work (work_idx) on delete cascade;
 alter table wish add constraint foreign key (user_idx) references user (user_idx) on delete cascade;

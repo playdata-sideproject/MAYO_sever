@@ -42,6 +42,7 @@ public class UserController {
     private HttpSession session;
 
     @GetMapping("/")
+//    public @ResponseBody Map<String, String> index(Model model){
     public String index(Model model){
 
         // application-oauth.properties 에 있는 OAuth2 클라이언드 정보 가져오기
@@ -72,7 +73,7 @@ public class UserController {
         }
          */
         model.addAttribute("urls", oauth2AuthenticationUrls);
-
+//        return oauth2AuthenticationUrls;
         return "index";
     }
 

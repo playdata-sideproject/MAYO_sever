@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,6 +30,7 @@ public class User {
     private String phone;
     private String birth;
     private String school;
+
 
     @Builder
     public User(String username, String name, String email, Role role, String provider, String providerId, Timestamp createDate) {
