@@ -1,66 +1,77 @@
-drop database mayo_db;
-create database mayo_db;
-use mayo_db;
+DROP DATABASE MAYO_DB;
+CREATE DATABASE MAYO_DB;
+USE MAYO_DB;
 
+CREATE TABLE USER (
+	USER_IDX INT PRIMARY KEY AUTO_INCREMENT,
+	USERNAME VARCHAR(100) NOT NULL,
+	PROVIDER VARCHAR(100) NOT NULL,
+	PROVIDER_ID VARCHAR(100) NOT NULL,
+	NAME VARCHAR(20) NOT NULL,
+	EMAIL VARCHAR(50) NOT NULL,
+	ROLE VARCHAR(10) NOT NULL,
+	JOINED_AT DATETIME NOT NULL,
+	USER_STATUS CHAR DEFAULT 0,
+	-- 사용자가 직접 추가할정보
+	PHONE VARCHAR(20),
+	BIRTH DATE,
+	SCHOOL VARCHAR(20)
+);
 
-create table user (
-user_idx int primary key auto_increment,
-username varchar(100),
-provider varchar(100),
-provider_id varchar(100),
-name varchar(20),
-email varchar(50),
-role varchar(10),
-created_at date,
-user_status char default 0,
--- 사용자가 직접 추가할정보
-phone varchar(20),
-birth date,
-school varchar(20)
+CREATE TABLE WORK (
+	WORK_IDX INT PRIMARY KEY AUTO_INCREMENT,
+	USER_IDX INT NOT NULL,
+	CAT_IDX INT NOT NULL,
+	WORK_TITLE VARCHAR(100) NOT NULL,
+	WORK_CONTENT LONGTEXT NOT NULL,
+	WORK_CREATED_AT DATETIME NOT NULL,
+	WORK_STATUS CHAR DEFAULT 0
+);
+
+CREATE TABLE WORK_IMAGE (
+	WORK_IMG_IDX INT PRIMARY KEY AUTO_INCREMENT,
+	WORK_IDX INT NOT NULL,
+	ORIG_FILE_NAME VARCHAR(100) NOT NULL,
+	FILE_PATH VARCHAR(100) NOT NULL,
+	FILE_SIZE INT NOT NULL
+);
+
+CREATE TABLE CATEGORY (
+	CAT_IDX INT PRIMARY KEY AUTO_INCREMENT,
+	CAT_NAME VARCHAR(10) NOT NULL
+);
+
+CREATE TABLE COMMENTS (
+	COMM_IDX INT PRIMARY KEY AUTO_INCREMENT,
+	WORK_IDX INT NOT NULL,
+	USER_IDX INT NOT NULL,
+	COMM_TITLE VARCHAR(100) NOT NULL,
+	COMM_CONTENT TEXT NOT NULL,
+	COMM_CREATED_AT DATETIME NOT NULL
+);
+
+CREATE TABLE LIKES (
+	LIKE_IDX INT PRIMARY KEY AUTO_INCREMENT,
+	WORK_IDX INT NOT NULL,
+	USER_IDX INT NOT NULL
+);
+
+CREATE TABLE WISH (
+	WISH_IDX INT PRIMARY KEY AUTO_INCREMENT,
+	WORK_IDX INT NOT NULL,
+	USER_IDX INT NOT NULL
 );
 
 
-create table work (
-work_idx int primary key auto_increment,
-user_idx int not null,
-cat_idx int not null,
-work_title varchar(100) not null,
-work_content longtext,
-work_created_at date not null,
-work_image int,
-work_status char default 0
-);
-
-create table category (
-cat_idx int primary key auto_increment,
-cat_name varchar(10)
-);
-
-create table comments (
-comm_idx int primary key auto_increment,
-work_idx int not null,
-user_idx int not null,
-comm_title varchar(100) not null,
-comm_content text not null,
-comm_created_at date not null
-);
-
-create table likes (
-like_idx int primary key auto_increment,
-work_idx int not null,
-user_idx int not null
-);
-
-create table wish (
-wish_idx int primary key auto_increment,
-work_idx int not null,
-user_idx int not null
-);
+ALTER TABLE WORK ADD CONSTRAINT FOREIGN KEY (USER_IDX) REFERENCES USER (USER_IDX);
+ALTER TABLE WORK ADD CONSTRAINT FOREIGN KEY (CAT_IDX) REFERENCES CATEGORY (CAT_IDX);
+ALTER TABLE WORK_IMAGE ADD CONSTRAINT FOREIGN KEY (WORK_IDX) REFERENCES WORK (WORK_IDX) ON DELETE CASCADE;
+ALTER TABLE COMMENTS ADD CONSTRAINT FOREIGN KEY (WORK_IDX) REFERENCES WORK (WORK_IDX) ON DELETE CASCADE;
+ALTER TABLE LIKES ADD CONSTRAINT FOREIGN KEY (WORK_IDX) REFERENCES WORK (WORK_IDX) ON DELETE CASCADE;
+ALTER TABLE WISH ADD CONSTRAINT FOREIGN KEY (WORK_IDX) REFERENCES WORK (WORK_IDX) ON DELETE CASCADE;
+ALTER TABLE WISH ADD CONSTRAINT FOREIGN KEY (USER_IDX) REFERENCES USER (USER_IDX) ON DELETE CASCADE;
 
 
-alter table work add constraint foreign key (user_idx) references user (user_idx);
-alter table work add constraint foreign key (cat_idx) references category (cat_idx);
-alter table comments add constraint foreign key (work_idx) references work (work_idx) on delete cascade;
-alter table likes add constraint foreign key (work_idx) references work (work_idx) on delete cascade;
-alter table wish add constraint foreign key (work_idx) references work (work_idx) on delete cascade;
-alter table wish add constraint foreign key (user_idx) references user (user_idx) on delete cascade;
+insert into CATEGORY values (1, '서양화');
+commit;
+

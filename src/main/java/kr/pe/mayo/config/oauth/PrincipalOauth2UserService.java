@@ -1,7 +1,9 @@
 package kr.pe.mayo.config.oauth;
 
-import kr.pe.mayo.config.oauth.provider.*;
-import kr.pe.mayo.controller.UserController;
+import kr.pe.mayo.config.oauth.provider.GoogleUserInfo;
+import kr.pe.mayo.config.oauth.provider.KakaoUserInfo;
+import kr.pe.mayo.config.oauth.provider.NaverUserInfo;
+import kr.pe.mayo.config.oauth.provider.OAuth2UserInfo;
 import kr.pe.mayo.dao.UserRepository;
 import kr.pe.mayo.domain.User;
 import kr.pe.mayo.domain.dto.Role;
@@ -12,22 +14,21 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 @Service
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
-
     @Autowired
     private UserRepository dao;
     @Autowired
-    private UserController controller;
+    private HttpSession session;
 
     // 구글로그인 후처리 메소드 - 구글로부터 받은 userRequest 를 후처리
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 
         OAuth2User oAuth2User = super.loadUser(userRequest);
-        System.out.println("getAttributes:  " + oAuth2User.getAttributes());  // System.out.println(userRequest.getClientRegistration().getClientId());
 
         // oauth 로그인 후 강제 회원가입 처리
         OAuth2UserInfo oAuth2UserInfo = null;
@@ -64,8 +65,8 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
                     .provider(provider)
                     .providerId(providerId)
                     .build();
-            
             dao.save(user);
+            session.setAttribute("user", user);
         }
 
         return new PrincipalDetails(user, oAuth2User.getAttributes());   // 여기서 PrincipalDetails 객체를 리턴해주면 이게 Authentication 객체로 들어가서 시큐리티 세션에 저장됨됨

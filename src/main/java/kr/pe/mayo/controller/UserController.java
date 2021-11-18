@@ -34,12 +34,12 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
+    @Autowired
+    private HttpSession session;
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private HttpSession session;
+
 
     @GetMapping("/")
     public String index(Model model){
@@ -93,37 +93,27 @@ public class UserController {
             return "register";
         }
 
-        return "mypage";
-        // 뷰 분기
-        // HttpSession에 넣나?
+        return "redirect:/mypage";
     }
 
 
     @PostMapping("/register")
     public String register(HttpSession session, String name, String phone, String birth, String school){
-//    public String register(String name, String phone, String birth, String school){
+
         // DTO객체를 만든 이유:
         // - 후에 RestController & axios로 클라이언트와 요청응답을 할 때 더 깔끔한 코드구조를 위해..!
         UserDTO.Register register = new UserDTO.Register(name, phone, birth, school);
         User user = userService.registerCreator(register);
         session.setAttribute("user", user);
 
-        return "mypage";
+        return "redirect:/mypage";
     }
 
-    @GetMapping("/user/oauth-test")
-    public void sessionTest(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-        System.out.println("oauth 회원가입 완료후: " + principalDetails);
-        System.out.println("oauth 회원가입 완료후: " + principalDetails.getUser());
-        System.out.println("oauth 회원가입 완료후: " + principalDetails.getAttributes());
-    }
-
-    @GetMapping("/user/register-test")
-    public void sessionTest2(HttpSession session){
-        User user = (User) session.getAttribute("user");
-        System.out.println("register 회원가입 완료후: " + user.getSchool());
+    @GetMapping("/mypage")
+    public String mypage(){
+        return "/mypage";
     }
 
 }
+
+

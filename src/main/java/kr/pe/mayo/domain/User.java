@@ -25,20 +25,20 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
     @CreationTimestamp
-    private Timestamp createdAt;
+    private Timestamp joinedAt;
     private String phone;
     private String birth;
     private String school;
 
     @Builder
-    public User(String username, String name, String email, Role role, String provider, String providerId, Timestamp createDate) {
+    public User(String username, String name, String email, Role role, String provider, String providerId, Timestamp joinedAt) {
         this.username = username;
         this.name = name;
         this.email = email;
         this.role = role;
         this.provider = provider;
         this.providerId = providerId;
-        this.createdAt = createDate;
+        this.joinedAt = joinedAt;
 
     }
 }
