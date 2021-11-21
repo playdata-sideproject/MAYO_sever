@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,20 +26,21 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
     @CreationTimestamp
-    private Timestamp joinedAt;
+    private Timestamp createdAt;
     private String phone;
     private String birth;
     private String school;
 
+
     @Builder
-    public User(String username, String name, String email, Role role, String provider, String providerId, Timestamp joinedAt) {
+    public User(String username, String name, String email, Role role, String provider, String providerId, Timestamp createDate) {
         this.username = username;
         this.name = name;
         this.email = email;
         this.role = role;
         this.provider = provider;
         this.providerId = providerId;
-        this.joinedAt = joinedAt;
+        this.createdAt = createDate;
 
     }
 }
