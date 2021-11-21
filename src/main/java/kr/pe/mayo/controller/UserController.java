@@ -13,12 +13,13 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Controller
 public class UserController {
@@ -41,16 +42,28 @@ public class UserController {
     @Autowired
     private HttpSession session;
 
+    @GetMapping
+    public PrincipalDetails getPrincipalDetails() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        System.out.println(principalDetails);
+
+        return principalDetails;
+    }
+
     @GetMapping("/")
-//    public @ResponseBody Map<String, String> index(Model model){
     public String index(Model model){
 
         // application-oauth.properties 에 있는 OAuth2 클라이언드 정보 가져오기
         // 이 코드셋을 사용하는 이유는 View에서 하나하나 작성하는것보단 SNS 로그인이 추가될 때 마다 정보를 View 같이 보내주며
         // 반복문을 통해 렌더링
 
-        // authorizationRequestBaseUri = "oauth2/authorization" + "/" + registration.getRegistrationId()
+        /*
+        application-oauth.properties 에 있는 OAuth2 클라이언드 정보 가져오기
+        이 코드셋을 사용하는 이유는 View에서 직접 작성하지 않고 SNS 로그인이 추가될 때 마다 정보를 View로 전달하여 반복문을 통해 렌더링
+         */
 
+        // authorizationRequestBaseUri = "oauth2/authorization" + "/" + registration.getRegistrationId()
         Iterable<ClientRegistration> clientRegistrations = null;
         ResolvableType type = ResolvableType.forInstance(clientRegistrationRepository)
                 .as(Iterable.class);
@@ -63,7 +76,6 @@ public class UserController {
                 oauth2AuthenticationUrls.put(registration.getClientName(),
                         authorizationRequestBaseUri + "/" + registration.getRegistrationId()));
 
-        // aplication
         System.out.println(oauth2AuthenticationUrls);
         /*
         {
@@ -73,41 +85,67 @@ public class UserController {
         }
          */
         model.addAttribute("urls", oauth2AuthenticationUrls);
-//        return oauth2AuthenticationUrls;
         return "index";
     }
 
     @GetMapping("/login-success")
     public String check(){
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-        System.out.println(principalDetails);
+        PrincipalDetails principalDetails = getPrincipalDetails();
 
         User user = userRepository.findByUsername(principalDetails.getUser().getUsername());
-        session.setAttribute("user", user);
-        System.out.println(session.getAttribute("user").toString());
 
         System.out.println(user);
-        if(user.getPhone() == null) {
+        if(!user.isRegCompleted()) {
             return "register";
         }
-
         return "mypage";
-        // 뷰 분기
-        // HttpSession에 넣나?
     }
 
     @PostMapping("/register")
-    public String register(HttpSession session, String name, String phone, String birth, String school){
-//    public String register(String name, String phone, String birth, String school){
-        // DTO객체를 만든 이유:
-        // - 후에 RestController & axios로 클라이언트와 요청응답을 할 때 더 깔끔한 코드구조를 위해..!
-        UserDTO.Register register = new UserDTO.Register(name, phone, birth, school);
-        User user = userService.registerCreator(register);
-        session.setAttribute("user", user);
+    public String register(UserDTO.Register register){
+        PrincipalDetails principalDetails = getPrincipalDetails();
+        User user = userService.registerCreator(principalDetails, register);
+
+        // 수정된 유저 정보 시큐리티 세션에 다시 저장
+        principalDetails.setUser(user);
+        session.setAttribute("user", user.getUserIdx());
 
         return "mypage";
+    }
+
+    @GetMapping("/user/withdrawal")
+    public @ResponseBody String userWithdrawal(){
+
+        PrincipalDetails principalDetails = getPrincipalDetails();
+
+        User user = userRepository.findByUsername(principalDetails.getUser().getUsername());
+        userService.userWithdrawal(user);
+        return "탈퇴";
+    }
+
+    // 내 정보 조회
+    @GetMapping("user/myInfo")
+    public @ResponseBody UserDTO.getInfo myInfo() {
+
+        PrincipalDetails principalDetails = getPrincipalDetails();
+        return userService.myInfo(principalDetails.getUser().getUserIdx());
+    }
+
+    // 전체조회
+    @GetMapping("/getUserByName")
+    public @ResponseBody List<UserDTO.getBasicInfo> myInfo(String name) {
+        return userService.getyUserByName(name);
+    }
+
+    @GetMapping("user/myInfo/update")
+    public @ResponseBody UserDTO.getInfo updateMyInfo(UserDTO.Update update) {
+
+        PrincipalDetails principalDetails = getPrincipalDetails();
+        User user = userService.updateUser(principalDetails, update);
+
+        principalDetails.setUser(user);
+
+        return userService.myInfo(principalDetails.getUser().getUserIdx());
     }
 
     @GetMapping("/user/oauth-test")
@@ -121,8 +159,7 @@ public class UserController {
 
     @GetMapping("/user/register-test")
     public void sessionTest2(HttpSession session){
-        User user = (User) session.getAttribute("user");
-        System.out.println("register 회원가입 완료후: " + user.getSchool());
+//        System.out.println("register 회원가입 완료후: " + user.getSchool());
     }
 
 }

@@ -14,6 +14,7 @@ import java.util.List;
 @Setter
 @Entity
 @ToString
+@Builder
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,16 +32,7 @@ public class User {
     private String birth;
     private String school;
 
+    private boolean userStatus;
+    private boolean regCompleted;
 
-    @Builder
-    public User(String username, String name, String email, Role role, String provider, String providerId, Timestamp createDate) {
-        this.username = username;
-        this.name = name;
-        this.email = email;
-        this.role = role;
-        this.provider = provider;
-        this.providerId = providerId;
-        this.createdAt = createDate;
-
-    }
 }
