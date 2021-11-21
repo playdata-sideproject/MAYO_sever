@@ -9,9 +9,12 @@ import kr.pe.mayo.domain.dto.WorkDTO;
 import kr.pe.mayo.domain.dto.WorkImgDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -46,5 +49,14 @@ public class WorkService {
             list.forEach(img -> workImgRepository.save(img.toEntity()));
         }
 
+    }
+
+    /** 모든 작품 조회 */
+    public List<WorkDTO.Get> getAllWork() {
+        List<WorkDTO.Get> workList = new ArrayList<>();
+        List<Work> list = (List<Work>) workRepository.findAll();
+
+        list.forEach(work -> workList.add(new WorkDTO.Get(work)));
+        return workList;
     }
 }
