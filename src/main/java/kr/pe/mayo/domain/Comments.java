@@ -15,6 +15,7 @@ import java.sql.Timestamp;
 @Setter
 @Entity
 public class Comments {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long commIdx;
@@ -25,4 +26,5 @@ public class Comments {
     private String commContent;
     @CreationTimestamp
     private Timestamp commCreatedAt;
+
 }

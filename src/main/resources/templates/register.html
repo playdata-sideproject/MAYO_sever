@@ -1,5 +1,7 @@
 <!DOCTYPE html>
+
 <html xmlns:th="http://www.thymeleaf.org">
+
 
 <head>
     <meta charset="UTF-8">
@@ -9,8 +11,10 @@
 <body>
     <h3>구글로 간편 회원가입</h3>
     <form action="register" method="post">
-        이름: <input type="text" name="name" th:value="${session.user.name}">
-        아이디: <input type="text" name="email" th:value="${session.user.email}">
+<!--        이름: <input type="text" name="name" th:value="${session.user.name}">-->
+        이름: <input type="text" name="name">
+<!--        아이디: <input type="text" name="email" th:value="${session.user.email}">-->
+        아이디: <input type="text" name="email">
         연락처: <input type="text" name="phone"><br>
         생년월일: <input type="text" name="birth"><br>
         학교인증: <input type="text" name="school"><br>
