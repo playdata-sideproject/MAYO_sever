@@ -18,7 +18,7 @@ import javax.persistence.Id;
 public class WorkImg {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long workImgIdx;
+    private Long idx;
 
     private Long workIdx;
     private String originalFileName;

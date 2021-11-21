@@ -9,14 +9,13 @@ import lombok.*;
 @Getter
 @Setter
 public class WishDTO {
-    private long wishIdx;
+    private long idx;
     private long workIdx;
     private long userIdx;
 
     public WishDTO(Wish entity) {
-        this.wishIdx = entity.getWishIdx();
-        this.workIdx = entity.getWork().getWorkIdx();
-        this.userIdx = entity.getUser().getUserIdx();
+        this.idx = entity.getIdx();
+        this.workIdx = entity.getWork().getIdx();
+        this.userIdx = entity.getUser().getIdx();
     }
-
 }

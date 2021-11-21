@@ -23,10 +23,7 @@ public class WishService {
     private WorkRepository workDAO;
 
     //위시리스트 조회
-    public List<WishDTO> getMyWishList(HttpSession session){
-        User user = (User)session.getAttribute("user");
-        System.out.println(user);
-
+    public List<WishDTO> getMyWishList(User user){
         List<Wish> wish = wishDAO.findByUser(user);
         List<WishDTO> wishList = new ArrayList<WishDTO>();
 
@@ -40,7 +37,7 @@ public class WishService {
     
     //위시리스트 삭제
     public void deleteMyWish(long wishIdx){
-        Wish wish = wishDAO.findBywishIdx(wishIdx);
+        Wish wish = wishDAO.findById(wishIdx).get();
 
         if(wish == null){
             System.out.println("찾는 위시가 없습니다.");
@@ -50,9 +47,8 @@ public class WishService {
     }
 
     //위시리스트 등록
-    public void addWish(HttpSession session, long workIdx){
-        User user = (User)session.getAttribute("user");
-        Work work = workDAO.findByworkIdx(workIdx);
+    public void addWish(User user, long workIdx){
+        Work work = workDAO.findById(workIdx).get();
         System.out.println(user);
         wishDAO.save(new Wish(work, user));
     }

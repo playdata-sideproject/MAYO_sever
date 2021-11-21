@@ -82,7 +82,7 @@ public class UserController {
 
         // 수정된 유저 정보 시큐리티 세션에 다시 저장
         principalDetails.setUser(user);
-        session.setAttribute("user", user.getUserIdx());
+        session.setAttribute("user", user.getIdx());
 
         return "mypage";
     }
@@ -98,7 +98,7 @@ public class UserController {
     // 내 정보 조회
     @GetMapping("user/myInfo")
     public @ResponseBody UserDTO.getInfo myInfo(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-        return userService.myInfo(principalDetails.getUser().getUserIdx());
+        return userService.myInfo(principalDetails.getUser().getIdx());
     }
 
     // 전체조회
@@ -112,6 +112,6 @@ public class UserController {
         User user = userService.updateUser(principalDetails, update);
         principalDetails.setUser(user);
 
-        return userService.myInfo(principalDetails.getUser().getUserIdx());
+        return userService.myInfo(principalDetails.getUser().getIdx());
     }
 }

@@ -13,19 +13,19 @@ public class WorkDTO {
     @Data
     @AllArgsConstructor
     public static class Upload {
-        private String workTitle;
+        private String title;
         private User user;
         private String username;
         @Enumerated(EnumType.STRING)
         private Category category;
-        private String workContent;
+        private String content;
 
         public Work toEntity() {
             return Work.builder()
-                    .workTitle(workTitle)
+                    .title(title)
                     .userIdx(user)
                     .category(category)
-                    .workContent(workContent)
+                    .content(content)
                     .build();
         }
 

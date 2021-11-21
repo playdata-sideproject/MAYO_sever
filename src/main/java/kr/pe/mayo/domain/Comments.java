@@ -18,13 +18,14 @@ public class Comments {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long commIdx;
+    private long idx;
     @ManyToOne
     private Work workIdx;
     private long userIdx;
-    private String commTitle;
-    private String commContent;
+    private String title;
+    private String content;
     @CreationTimestamp
-    private Timestamp commCreatedAt;
+    private Timestamp createdAt;
 
+    private boolean hidden;
 }

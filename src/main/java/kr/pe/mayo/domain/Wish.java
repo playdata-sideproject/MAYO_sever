@@ -14,7 +14,7 @@ import javax.persistence.*;
 public class Wish {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long wishIdx;
+    private long idx;
 
     @JoinColumn(name="work_idx")
     @ManyToOne

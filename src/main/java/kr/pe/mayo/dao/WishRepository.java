@@ -9,6 +9,4 @@ import java.util.List;
 
 public interface WishRepository extends CrudRepository<Wish, Long> {
     List<Wish> findByUser(User user);
-    Wish findBywishIdx(long workIdx);
-
 }

@@ -19,7 +19,7 @@ public class Work {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long workIdx;
+    private long idx;
 
     // 칼럼명을 따로 설정을 안하면 "user_idx_user_idx"로 지정됨 (맘에 안듬..!)
     // DDL에서 지정한 user_idx와 자동적으로 연동이 안됨..!
@@ -30,17 +30,17 @@ public class Work {
     @Enumerated(EnumType.STRING)
     private Category category;
 
-    private String workTitle;
+    private String title;
     //    // 등록 하고 이미지 엔터티와 연결을 위해, work_idx를 찾아올 idx 외 다른 고유값이 필요함
 //    // 그걸 등록한 user의 username으로 하는게 좋다고 생각해서 일단 이렇게 했습니다
 //    // 근데 이렇게 하면 User객체와 연결이 필요없지 않을까 생각도 드네용~
 //    private String username;
-    private String workContent;
+    private String content;
 
     @CreationTimestamp
-    private Timestamp WorkCreatedAt;
+    private Timestamp createdAt;
 
-    private char workStatus;
+    private String status;
 
     @OneToMany
     private List<WorkImg> workImgs;

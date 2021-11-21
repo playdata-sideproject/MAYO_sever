@@ -9,12 +9,10 @@ public enum Category {
     private String category;
 
     Category(String category) {
-
         this.category = category;
     }
 
     public String getCategory() {
-
         return category;
     }
 }

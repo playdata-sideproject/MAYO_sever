@@ -29,7 +29,7 @@ public class UserService {
         user.setBirth(register.getBirth());
         user.setSchool(register.getSchool());
         user.setRegCompleted(true);
-        user.setUserStatus(true);
+        user.setStatus(true);
         dao.save(user);
 
         return user;
@@ -48,7 +48,7 @@ public class UserService {
     }
 
     public void userWithdrawal(User user) {
-        user.setUserStatus(false);
+        user.setStatus(false);
         dao.save(user);
     }
 

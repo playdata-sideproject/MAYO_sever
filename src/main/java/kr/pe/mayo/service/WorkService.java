@@ -1,6 +1,7 @@
 package kr.pe.mayo.service;
 
 import kr.pe.mayo.common.FileUtils;
+import kr.pe.mayo.config.oauth.PrincipalDetails;
 import kr.pe.mayo.dao.WorkImgRepository;
 import kr.pe.mayo.dao.WorkRepository;
 import kr.pe.mayo.domain.User;
@@ -32,21 +33,21 @@ public class WorkService {
     @Autowired
     private HttpSession session;
 
-    public void uploadWork(WorkDTO.Upload upload, MultipartHttpServletRequest multipartHttpServletRequest) throws Exception {
+    public void uploadWork(WorkDTO.Upload upload, MultipartHttpServletRequest multipartHttpServletRequest, User user) throws Exception {
 
         // 유저 정보 저장
-        upload.setUser((User) session.getAttribute("user"));
+        upload.setUser(user);
 
         // 유저정보와 작품명을 통해 이미 DB에 있는지 확인
-        if(workRepository.findByUserIdxAndWorkTitle(upload.getUser(), upload.getWorkTitle()) != null) {
+        if(workRepository.findByUserIdxAndTitle(upload.getUser(), upload.getTitle()) != null) {
             throw new Exception("동일한 이름으로 등록된 작품이 있습니다");
         } else {
             // 작품 저장 후 저장 된 작품의 유저정보와 작품명으로 idx 찾기
             Work work = workRepository.save(upload.toEntity());
-            System.out.println("********* work id : " + work.getWorkIdx());
+            System.out.println("********* work id : " + work.getIdx());
 
             // 업로드한 이미지를 가공한 리스트 만들기
-            List<WorkImgDTO> list = fileUtils.parseFileInfo(work.getWorkIdx(), multipartHttpServletRequest);
+            List<WorkImgDTO> list = fileUtils.parseFileInfo(work.getIdx(), multipartHttpServletRequest);
             list.forEach(img -> workImgRepository.save(img.toEntity()));
         }
 
