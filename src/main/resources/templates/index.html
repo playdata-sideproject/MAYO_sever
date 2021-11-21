@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MAYO</title>
+</head>
+<body>
+<h3>인덱스 페이지</h3>
+
+<table th:each="url : ${urls}">
+    <tr>
+        <td><a href="#" th:href="${url.value}" th:text="${url.key}"></a></td>
+        <td><a th:if="${session.user}" href="/logout">로그아웃</a></td>
+    </tr>
+</table>
+
+</body>
+</html>
