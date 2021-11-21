@@ -1,7 +1,6 @@
 package kr.pe.mayo.domain.dto;
 
 import kr.pe.mayo.domain.Work;
-import kr.pe.mayo.domain.WorkImage;
 import lombok.Data;
 
 @Data

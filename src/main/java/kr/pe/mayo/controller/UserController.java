@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,6 +42,7 @@ public class UserController {
 
 
     @GetMapping("/")
+//    public @ResponseBody Map<String, String> index(Model model){
     public String index(Model model){
 
         // application-oauth.properties 에 있는 OAuth2 클라이언드 정보 가져오기
@@ -68,11 +70,10 @@ public class UserController {
             Google=oauth2/authorization/google,
             kakao=oauth2/authorization/kakao,
             Naver=oauth2/authorization/naver,
-            Facebook=oauth2/authorization/facebook
         }
          */
         model.addAttribute("urls", oauth2AuthenticationUrls);
-
+//        return oauth2AuthenticationUrls;
         return "index";
     }
 
@@ -94,7 +95,6 @@ public class UserController {
 
         return "redirect:/mypage";
     }
-
 
     @PostMapping("/register")
     public String register(HttpSession session, String name, String phone, String birth, String school){
