@@ -1,13 +1,11 @@
 package kr.pe.mayo.controller;
 
 import kr.pe.mayo.domain.dto.WorkDTO;
-import kr.pe.mayo.domain.dto.WorkImageDTO;
 import kr.pe.mayo.service.WorkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.IOException;
