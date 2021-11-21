@@ -1,11 +1,12 @@
 package kr.pe.mayo.config.oauth;
 
-import kr.pe.mayo.config.oauth.provider.*;
-import kr.pe.mayo.controller.UserController;
+import kr.pe.mayo.config.oauth.provider.GoogleUserInfo;
+import kr.pe.mayo.config.oauth.provider.KakaoUserInfo;
+import kr.pe.mayo.config.oauth.provider.NaverUserInfo;
+import kr.pe.mayo.config.oauth.provider.OAuth2UserInfo;
 import kr.pe.mayo.dao.UserRepository;
 import kr.pe.mayo.domain.User;
 import kr.pe.mayo.domain.dto.Role;
-import kr.pe.mayo.domain.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -18,18 +19,16 @@ import java.util.Map;
 
 @Service
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
-
     @Autowired
     private UserRepository dao;
     @Autowired
-    private UserController controller;
+    private HttpSession session;
 
     // 구글로그인 후처리 메소드 - 구글로부터 받은 userRequest 를 후처리
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 
         OAuth2User oAuth2User = super.loadUser(userRequest);
-        System.out.println("getAttributes:  " + oAuth2User.getAttributes());  // System.out.println(userRequest.getClientRegistration().getClientId());
 
         // oauth 로그인 후 강제 회원가입 처리
         OAuth2UserInfo oAuth2UserInfo = null;
@@ -47,10 +46,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
             System.out.println("지원하지 않습니다.");
         }
 
-        // 아래 코드는 구글 OAuth2User2 한정적
-        // 때문에 카카오일때도 이메일과 다른 정보를 담을 수 있게 서비스 객체 Refactoring 필요
-
-        String provider = userRequest.getClientRegistration().getRegistrationId();  // = google
+        String provider = oAuth2UserInfo.getProvider(); // = google
         String providerId = oAuth2UserInfo.getProviderId();  // = 구글이 제공해주는 회원 고유 id
         String name = oAuth2UserInfo.getName();
         String email = oAuth2UserInfo.getEmail();
@@ -69,8 +65,8 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
                     .provider(provider)
                     .providerId(providerId)
                     .build();
-            
             dao.save(user);
+            session.setAttribute("user", user);
         }
 
         return new PrincipalDetails(user, oAuth2User.getAttributes());   // 여기서 PrincipalDetails 객체를 리턴해주면 이게 Authentication 객체로 들어가서 시큐리티 세션에 저장됨됨

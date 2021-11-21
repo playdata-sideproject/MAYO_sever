@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form action="/insertPost" method="post" enctype="multipart/form-data">
+        <input type="text" name="catIdx" value=1>
+        <input type="text" name="workTitle" value="제목">
+        <input type="text" name="workContent" value="내용">
+
+        <input type="file" name="workImages" multiple="multiple">
+        <input type="submit" value="등록">
+    </form>
+</body>
+</html>

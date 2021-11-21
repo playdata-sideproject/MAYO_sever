@@ -4,13 +4,9 @@ import kr.pe.mayo.domain.User;
 import kr.pe.mayo.domain.Work;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.ManyToOne;
-import java.sql.Timestamp;
-import java.util.List;
 
 public class WorkDTO {
 

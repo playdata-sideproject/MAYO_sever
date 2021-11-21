@@ -30,5 +30,5 @@ public class NaverUserInfo implements OAuth2UserInfo{
     public String getProvider() {
         return "naver";
     }
-
 }
+
