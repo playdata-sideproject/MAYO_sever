@@ -48,7 +48,6 @@ public class UserDTO {
         String name;
         String email;
         String phone;
-
     }
 
 }

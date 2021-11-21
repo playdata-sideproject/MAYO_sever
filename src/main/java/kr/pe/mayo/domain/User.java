@@ -34,5 +34,4 @@ public class User {
 
     private boolean userStatus;
     private boolean regCompleted;
-
 }
