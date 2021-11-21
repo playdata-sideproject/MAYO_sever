@@ -1,10 +1,16 @@
 <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Comment test page</title>
 </head>
 <body>
-
+<form action="/insertComment" method="post">
+    작성자 : <label th:text="${session.user.name}"></label><br>
+    <input type="text" name="commTitle" value="제목입력" style="width:300px"><br>
+    <input type="textarea" name="commContent" value="댓글내용">
+    <input type="submit" value="댓글등록">
+</form>
 </body>
 </html>
