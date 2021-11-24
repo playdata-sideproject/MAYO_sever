@@ -44,7 +44,7 @@ public class UserController {
     private HttpSession session;
 
     @GetMapping("/")
-    public String index(Model model){
+    public @ResponseBody Map<String, String> index(Model model){
 
         Iterable<ClientRegistration> clientRegistrations = null;
         ResolvableType type = ResolvableType.forInstance(clientRegistrationRepository)
@@ -58,14 +58,16 @@ public class UserController {
                 oauth2AuthenticationUrls.put(registration.getClientName(),
                         authorizationRequestBaseUri + "/" + registration.getRegistrationId()));
 
-        System.out.println(oauth2AuthenticationUrls);
+//        System.out.println(oauth2AuthenticationUrls);
+//
+//        model.addAttribute("urls", oauth2AuthenticationUrls);
+//        return "index";
 
-        model.addAttribute("urls", oauth2AuthenticationUrls);
-        return "index";
+        return oauth2AuthenticationUrls;
     }
 
     @GetMapping("/login-success")
-    public String check(@AuthenticationPrincipal PrincipalDetails principalDetails){
+    public @ResponseBody String check(@AuthenticationPrincipal PrincipalDetails principalDetails){
 
         User user = userRepository.findByUsername(principalDetails.getUser().getUsername());
 

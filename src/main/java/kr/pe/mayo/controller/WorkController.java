@@ -1,17 +1,24 @@
 package kr.pe.mayo.controller;
 
 import kr.pe.mayo.config.oauth.PrincipalDetails;
-import kr.pe.mayo.domain.User;
+import kr.pe.mayo.domain.WorkImg;
 import kr.pe.mayo.domain.dto.WorkDTO;
+import kr.pe.mayo.domain.dto.WorkImgDTO;
+import kr.pe.mayo.service.WorkImgService;
 import kr.pe.mayo.service.WorkService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class WorkController {
@@ -19,6 +26,8 @@ public class WorkController {
     @Autowired
     WorkService workService;
 
+    @Autowired
+    WorkImgService workImgService;
 
     @GetMapping("/upload")
     public String myPage() {
@@ -35,4 +44,12 @@ public class WorkController {
         return "upload";
 //        return "work/myWorkList";
     }
+
+
+    @GetMapping("/work/imgs/{workIdx}")
+    // 작품별 모든 이미지 조회
+    public List<WorkImgDTO> findAllByWork(Long workIdx) {
+        return workImgService.findAllByWork(workIdx);
+    }
+
 }

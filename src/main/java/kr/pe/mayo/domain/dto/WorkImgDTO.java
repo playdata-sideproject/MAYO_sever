@@ -12,7 +12,7 @@ public class WorkImgDTO {
     private Long workIdx;
     private String originalFileName;
     private String storedFilePath;
-    private long fileSize;
+    private Long fileSize;
 
     public WorkImg toEntity() {
         return WorkImg.builder()
@@ -21,5 +21,12 @@ public class WorkImgDTO {
                 .storedFilePath(storedFilePath)
                 .fileSize(fileSize)
                 .build();
+    }
+
+    public WorkImgDTO(WorkImg workImg) {
+        this.workIdx = workImg.getWorkIdx();
+        this.originalFileName = workImg.getOriginalFileName();
+        this.storedFilePath = workImg.getStoredFilePath();
+        this.fileSize = workImg.getFileSize();
     }
 }
