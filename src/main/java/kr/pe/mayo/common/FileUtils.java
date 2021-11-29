@@ -1,6 +1,5 @@
 package kr.pe.mayo.common;
 
-import kr.pe.mayo.domain.dto.WorkImageDTO;
 import kr.pe.mayo.domain.dto.WorkImgDTO;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
@@ -13,7 +12,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 
 @Component
 public class FileUtils {

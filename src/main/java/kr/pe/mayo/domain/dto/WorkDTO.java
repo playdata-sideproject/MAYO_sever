@@ -2,38 +2,38 @@ package kr.pe.mayo.domain.dto;
 
 import kr.pe.mayo.domain.User;
 import kr.pe.mayo.domain.Work;
-import kr.pe.mayo.domain.WorkImg;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.sql.Timestamp;
-import java.util.List;
 
 public class WorkDTO {
 
     @Data
-    public static class Get {
-        private long workIdx;
+    public static class List {
+        private long idx;
         private String writer;
         private String category;
-        private String workTitle;
-        private String workContent;
-        private Timestamp workCreatedAt;
-        private char workStatus;
+        private String title;
+        private String content;
+        private Timestamp createdAt;
+        private String status;
         private long thumbnailId;
 
-        public Get(Work entity){
-            this.workIdx = entity.getWorkIdx();
-            this.writer = entity.getUserIdx().getUsername();
+        public List(Work entity){
+            this.idx = entity.getIdx();
+            this.writer = entity.getUserIdx().getName();
             this.category = entity.getCategory().getCategory();
-            this.workTitle = entity.getWorkTitle();
-            this.workContent = entity.getWorkContent();
-            this.workCreatedAt = entity.getWorkCreatedAt();
-            this.workStatus = entity.getWorkStatus();
+            this.title = entity.getTitle();
+            this.content = entity.getContent();
+            this.createdAt = entity.getCreatedAt();
+            this.status = entity.getStatus();
             if (!entity.getWorkImgs().isEmpty()){  // 게시글에 포함된 이미지 있으면
-                this.thumbnailId = entity.getWorkImgs().get(0).getWorkImgIdx();
+                this.thumbnailId = entity.getWorkImgs().get(0).getIdx();
             } else {  // 이미지 없으면 기본썸네일 반환
                 this.thumbnailId = 0L;
             }
@@ -41,21 +41,20 @@ public class WorkDTO {
     }
 
     @Data
-    @AllArgsConstructor
+    @Builder
     public static class Upload {
-        private String workTitle;
+        private String title;
         private User user;
-        private String username;
         @Enumerated(EnumType.STRING)
         private Category category;
-        private String workContent;
+        private String content;
 
         public Work toEntity() {
             return Work.builder()
-                    .workTitle(workTitle)
+                    .title(title)
                     .userIdx(user)
                     .category(category)
-                    .workContent(workContent)
+                    .content(content)
                     .build();
         }
     }

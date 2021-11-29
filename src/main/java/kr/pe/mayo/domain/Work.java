@@ -2,6 +2,7 @@ package kr.pe.mayo.domain;
 
 import kr.pe.mayo.domain.dto.Category;
 import lombok.*;
+import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -10,14 +11,15 @@ import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 @Builder
 @Entity
 public class Work {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long workIdx;
+    private long idx;
 
     @ManyToOne
     @JoinColumn(name="userIdx")
@@ -26,15 +28,16 @@ public class Work {
     @Enumerated(EnumType.STRING)
     private Category category;
 
-    private String workTitle;
+    private String title;
 
-    private String workContent;
+    private String content;
 
     @CreationTimestamp
-    private Timestamp WorkCreatedAt;
+    private Timestamp createdAt;
 
-    private char workStatus;
+    private String status;
 
     @OneToMany
+    @JoinColumn(name="Idx")
     private List<WorkImg> workImgs;
 }

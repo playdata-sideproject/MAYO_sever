@@ -39,5 +39,4 @@ public class KakaoUserInfo implements OAuth2UserInfo{
 
         return "kakao";
     }
-
 }

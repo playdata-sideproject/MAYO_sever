@@ -1,5 +1,6 @@
 package kr.pe.mayo.domain.dto;
 
+import kr.pe.mayo.domain.Work;
 import kr.pe.mayo.domain.WorkImg;
 import lombok.*;
 
@@ -9,7 +10,7 @@ import lombok.*;
 @Getter
 @Setter
 public class WorkImgDTO {
-    private Long workIdx;
+    private long workIdx;
     private String originalFileName;
     private String storedFilePath;
     private long fileSize;
