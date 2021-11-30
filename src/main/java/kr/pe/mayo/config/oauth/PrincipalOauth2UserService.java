@@ -19,6 +19,7 @@ import java.util.Map;
 
 @Service
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
+
     @Autowired
     private UserRepository dao;
     @Autowired

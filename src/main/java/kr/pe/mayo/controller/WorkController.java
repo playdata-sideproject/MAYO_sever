@@ -41,7 +41,10 @@ public class WorkController {
         System.out.println("uploadWork ***************************");
         System.out.println(upload.getCategory());
         workService.uploadWork(upload, multipartHttpServletRequest, principalDetails.getUser());
-        return "upload";
+        return "/";
+//        return "upload";
+
+
 //        return "work/myWorkList";
     }
 
