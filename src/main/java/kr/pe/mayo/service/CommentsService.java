@@ -29,9 +29,9 @@ public class CommentsService {
 
         User user = (User)session.getAttribute("user");
         Work work = workRepository.findById(1l).get();
-        comments.setCommTitle(commentsDTO.getCommTitle());
-        comments.setCommContent(commentsDTO.getCommContent());
-        comments.setUserIdx(user.getUserIdx());
+        comments.setTitle(commentsDTO.getCommTitle());
+        comments.setContent(commentsDTO.getCommContent());
+        comments.setUserIdx(user.getIdx());
         comments.setWorkIdx(work);
 
         commentsRepository.save(comments);

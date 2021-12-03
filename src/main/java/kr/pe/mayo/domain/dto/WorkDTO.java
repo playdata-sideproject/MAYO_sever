@@ -1,19 +1,11 @@
 package kr.pe.mayo.domain.dto;
 
-<<<<<<< HEAD
-=======
 import kr.pe.mayo.domain.User;
 import kr.pe.mayo.domain.Work;
 import lombok.AllArgsConstructor;
->>>>>>> feature_clientConnection
 import lombok.Data;
-
-<<<<<<< HEAD
-import java.util.List;
-=======
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
->>>>>>> feature_clientConnection
 
 public class WorkDTO {
 
