@@ -1,25 +1,20 @@
 package kr.pe.mayo.service;
 
 import kr.pe.mayo.common.FileUtils;
-import kr.pe.mayo.dao.CategoryRepository;
-import kr.pe.mayo.dao.WorkImageRepository;
+import kr.pe.mayo.config.oauth.PrincipalDetails;
+import kr.pe.mayo.dao.WorkImgRepository;
 import kr.pe.mayo.dao.WorkRepository;
-import kr.pe.mayo.domain.Category;
 import kr.pe.mayo.domain.User;
 import kr.pe.mayo.domain.Work;
-import kr.pe.mayo.domain.WorkImage;
 import kr.pe.mayo.domain.dto.WorkDTO;
-import kr.pe.mayo.domain.dto.WorkImageDTO;
+import kr.pe.mayo.domain.dto.WorkImgDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -27,46 +22,53 @@ import java.util.List;
 public class WorkService {
 
     @Autowired
-    private WorkRepository workRepository;
-    @Autowired
-    private WorkImageRepository workImageRepository;
-    @Autowired
-    private CategoryRepository categoryRepository;
-    @Autowired
     private FileUtils fileUtils;
+
+    @Autowired
+    private WorkRepository workRepository;
+
+    @Autowired
+    private WorkImgRepository workImgRepository;
+
     @Autowired
     private HttpSession session;
 
-    public void insertPost(WorkDTO workDTO, MultipartHttpServletRequest multipartHttpServletRequest) throws IOException {
-        // Work 테이블에 게시글부터 저장
-        Work work = new Work();
+    public void uploadWork(WorkDTO.Upload upload, MultipartHttpServletRequest multipartHttpServletRequest, User user) throws Exception {
 
-        User user = (User) session.getAttribute("user");
-        Category category = categoryRepository.findById(workDTO.getCatIdx()).get();
+        // 유저 정보 저장
+        upload.setUser(user);
 
-        System.out.println(user);
-        System.out.println(category);
+        // 유저정보와 작품명을 통해 이미 DB에 있는지 확인
+        if(workRepository.findByUserIdxAndTitle(upload.getUser(), upload.getTitle()) != null) {
+            throw new Exception("동일한 이름으로 등록된 작품이 있습니다");
+        } else {
+            // 작품 저장 후 저장 된 작품의 유저정보와 작품명으로 idx 찾기
+            Work work = workRepository.save(upload.toEntity());
+            System.out.println("********* work id : " + work.getIdx());
 
-        work.setUserIdx(user);
-        work.setCatIdx(category);
-        work.setWorkTitle(workDTO.getWorkTitle());
-        work.setWorkContent(workDTO.getWorkContent());
-        work.setWorkStatus('0');
+            // 업로드한 이미지를 가공한 리스트 만들기
+            List<WorkImgDTO> list = fileUtils.parseFileInfo(work.getIdx(), multipartHttpServletRequest);
+            list.forEach(img -> workImgRepository.save(img.toEntity()));
+        }
 
-        //  insert into work (cat_idx_cat_idx, user_idx_user_idx, work_content, work_created_at, work_status, work_title) values (?, ?, ?, ?, ?, ?)  ?????????
-        Work newWork = workRepository.save(work); // 저장되면서 자동부여된 work 테이블의 인덱스 가져오기
+        // 파일정보 확인용
+        // 파이널 코드에선 필요 없음
+        if(ObjectUtils.isEmpty(multipartHttpServletRequest) == false) {
+            Iterator<String> iterator = multipartHttpServletRequest.getFileNames();
+            String name;
+            while(iterator.hasNext()) {
+                name = iterator.next();
+                System.out.println("file tag name : " + name);
+                List<MultipartFile> list = multipartHttpServletRequest.getFiles(name);
 
-        List<WorkImageDTO> dtoList = fileUtils.parseFileInfo(multipartHttpServletRequest);
-        if (CollectionUtils.isEmpty(dtoList) == false) {
-            List<WorkImage> list = new ArrayList<>();
-            dtoList.forEach(v -> list.add(new WorkImage().builder()
-                    .workIdx(newWork)
-                    .origFileName(v.getOrigFileName())
-                    .filePath(v.getFilePath())
-                    .fileSize(v.getFileSize())
-                    .build()
-            ));
-            workImageRepository.saveAll(list);
+                list.forEach(v -> {
+                    System.out.println("start file information");
+                    System.out.println("file name : " + v.getOriginalFilename());
+                    System.out.println("file size : " + v.getSize());
+                    System.out.println("file content type : " + v.getContentType());
+                    System.out.println("end file information \n");
+                });
+            }
         }
     }
 }

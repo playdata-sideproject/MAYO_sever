@@ -1,9 +1,6 @@
 package kr.pe.mayo.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -11,13 +8,25 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
+@ToString
 @Entity
 public class Wish {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long wishIdx;
+    private long idx;
+
+    @JoinColumn(name="work_idx")
     @ManyToOne
-    private Work workIdx;
+    private Work work;
+
+    @JoinColumn(name="user_idx")
     @ManyToOne
-    private User userIdx;
+    private User user;
+
+    public Wish(Work work, User user) {
+        this.work = work;
+        this.user = user;
+    }
+
 }

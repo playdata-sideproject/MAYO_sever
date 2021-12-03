@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form id="frm" name="frm" method="post" action="/work/uploadWork" enctype="multipart/form-data">
+        <label>작품이름</label>
+        <input type="name" id="title" name="title"><br>
+        <label>카테고리</label>
+        <select id="category" name="category">
+            <option value="FURNITURE">가구</option>
+            <option value="ILLUSTRATION">일러스트</option>
+            <option value="METALWORK">금속공예</option>
+            <option value="CERAMICS">도자공예</option>
+        </select><br>
+        <textarea id="content" cols="30" rows="10">
+            작품설명
+        </textarea><br>
+        <label>이미지업로드</label>
+        <input type="file" id="files" name="files" multiple="multiple"><br>
+        <input type="submit" id="submit" value="저장" class="btn">
+    </form>
+</body>
+</html>

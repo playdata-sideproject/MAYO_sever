@@ -7,14 +7,19 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-@NoArgsConstructor
+@Getter
+@Setter
 @AllArgsConstructor
-@Data
-@Builder
+@NoArgsConstructor
 @Entity
-public class Category {
+@Builder
+public class WorkImg {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long catIdx;
-    private String catName;
+    private Long idx;
+
+    private Long workIdx;
+    private String originalFileName;
+    private String storedFilePath;
+    private long fileSize;
 }

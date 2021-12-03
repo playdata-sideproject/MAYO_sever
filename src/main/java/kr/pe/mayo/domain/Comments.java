@@ -15,9 +15,10 @@ import java.sql.Timestamp;
 @Setter
 @Entity
 public class Comments {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long commIdx;
+    private long idx;
     @ManyToOne
     @JoinColumn(name="workIdx")
     private Work workIdx;
@@ -25,8 +26,10 @@ public class Comments {
     //한개의 작품이 여러개의 댓글 가질 수 있음.
     //한개의 작품에 한명의 유저가 여러 댓글 작성 가능.
     private long userIdx;
-    private String commTitle;
-    private String commContent;
+    private String title;
+    private String content;
     @CreationTimestamp
-    private Timestamp commCreatedAt;
+    private Timestamp createdAt;
+
+    private boolean hidden;
 }
