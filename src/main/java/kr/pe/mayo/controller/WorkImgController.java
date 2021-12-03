@@ -1,6 +1,5 @@
 package kr.pe.mayo.controller;
 
-import kr.pe.mayo.domain.WorkImg;
 import kr.pe.mayo.domain.dto.WorkImgDTO;
 import kr.pe.mayo.service.WorkImgService;
 import org.apache.commons.io.IOUtils;
@@ -36,7 +35,7 @@ public class WorkImgController {
                     MediaType.IMAGE_GIF_VALUE
             }
     )
-    public ResponseEntity<byte[]> getWorkThumbnail(@PathVariable Long idx) throws IOException {
+    public List<ResponseEntity<byte[]>> getWorkThumbnail(@PathVariable Long idx) throws IOException {
         List<WorkImgDTO> workImgDTOList = workImgService.findAllByWork(idx);
         List<ResponseEntity<byte[]>> workImgList = new ArrayList<>();
 
@@ -56,15 +55,13 @@ public class WorkImgController {
     }
 
     // 작품 전체 이미지 조회
-    @CrossOrigin
-    @GetMapping(
-            value = "/images/{idx}",
-            produces = {
-                    MediaType.IMAGE_JPEG_VALUE,
-                    MediaType.IMAGE_PNG_VALUE,
-                    MediaType.IMAGE_GIF_VALUE
-            }
-    )
+    @GetMapping(value = "/images/{idx}"
+//            produces = {
+//                    MediaType.IMAGE_JPEG_VALUE,
+//                    MediaType.IMAGE_PNG_VALUE,
+//                    MediaType.IMAGE_GIF_VALUE
+//            }
+)
     public List<WorkImgDTO> getWorkImg(@PathVariable Long idx) throws IOException {
         List<WorkImgDTO> workImgDTOList = workImgService.findAllByWork(idx);
         return workImgDTOList;

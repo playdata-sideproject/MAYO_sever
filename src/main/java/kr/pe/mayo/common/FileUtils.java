@@ -28,7 +28,7 @@ public class FileUtils {
         List<WorkImgDTO> imgList = new ArrayList<>();
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyyMMdd");
         ZonedDateTime current = ZonedDateTime.now();
-        String path = "images/" + current.format(format);
+        String path = "MAYO/src/main/resources/static/images/" + current.format(format);
         File file = new File(path);
         if(!file.exists()) {
             file.mkdir();

@@ -9,7 +9,10 @@ import kr.pe.mayo.domain.dto.UserDTO;
 import kr.pe.mayo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ResolvableType;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
@@ -17,10 +20,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
@@ -49,9 +54,9 @@ public class UserController {
     private ObjectMapper objectMapper;
 
     @GetMapping("/")
-//    public String index(Model model){
+    public String index(Model model){
 
-    public @ResponseBody Map<String, String> index(Model model){
+//    public @ResponseBody Map<String, String> index(Model model){
 
         Iterable<ClientRegistration> clientRegistrations = null;
         ResolvableType type = ResolvableType.forInstance(clientRegistrationRepository)
@@ -65,12 +70,12 @@ public class UserController {
                 oauth2AuthenticationUrls.put(registration.getClientName(),
                         authorizationRequestBaseUri + "/" + registration.getRegistrationId()));
 
-////        System.out.println(oauth2AuthenticationUrls);
-////
-//        model.addAttribute("urls", oauth2AuthenticationUrls);
-//        return "index";
+//        System.out.println(oauth2AuthenticationUrls);
+//
+        model.addAttribute("urls", oauth2AuthenticationUrls);
+        return "index";
 
-        return oauth2AuthenticationUrls;
+//        return oauth2AuthenticationUrls;
     }
 
     @GetMapping("/login-success")
